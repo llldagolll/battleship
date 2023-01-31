@@ -3,7 +3,11 @@ package org.example.domain.battleship;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 @NoArgsConstructor
 @Data
@@ -16,6 +20,7 @@ public class BattleShip {
 
     int[] columnOfNum = new int[]{1, 2, 3, 4, 5, 6, 7 ,8, 9, 10};
 
+
     public void play() {
         Ship[] ship = Ship.values();
         Scanner scanner = new Scanner(System.in);
@@ -24,9 +29,14 @@ public class BattleShip {
                 ship) {
             showField();
             String input = inputFromUser(scanner, s);
-            setShip(input);
+//            setShip(input);
         }
     }
+
+//    private void setShip(String input) {
+//
+//    }
+
 
 
     void showField() {
@@ -55,16 +65,31 @@ public class BattleShip {
     }
 
     String inputFromUser(Scanner scanner, Ship ship) {
-        System.out.println();
-        System.out.printf("Enter the coordinates of %s (%d cells):", ship.getName(), ship.getSize());
-        System.out.println();
-        System.out.println();
-        System.out.print("> ");
+        printInputInterface(ship);
         String input = scanner.nextLine();
         System.out.println(input); //debug用
         System.out.println();
 
         return input;
+    }
+
+    boolean IsInputValueTypeCorrect(String point) throws IOException {
+        String regex = "[A-J]([1-9]|10)";
+        Pattern p1 = Pattern.compile(regex); // 正規表現パターンの読み込み
+        Matcher m1 = p1.matcher(point); // パターンと検査対象文字列の照合
+        boolean result = m1.matches(); // 照合結果をtrueかfalseで取得
+        if (m1.matches() == false) {
+            throw new IOException("不適切なフォーマットです");
+        }
+        return result;
+    }
+
+    private void printInputInterface(Ship ship) {
+        System.out.println();
+        System.out.printf("Enter the coordinates of %s (%d cells):", ship.getName(), ship.getSize());
+        System.out.println();
+        System.out.println();
+        System.out.print("> ");
     }
 
 
