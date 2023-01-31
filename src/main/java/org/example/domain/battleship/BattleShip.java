@@ -78,10 +78,17 @@ public class BattleShip {
         Pattern p1 = Pattern.compile(regex); // 正規表現パターンの読み込み
         Matcher m1 = p1.matcher(point); // パターンと検査対象文字列の照合
         boolean result = m1.matches(); // 照合結果をtrueかfalseで取得
-        if (m1.matches() == false) {
+        if (!m1.matches()) {
             throw new IOException("不適切なフォーマットです");
         }
         return result;
+    }
+
+    boolean isCoordinatesTwo(String validInput) throws IOException {
+        if (validInput.split(" ").length != 2) {
+            throw new IOException();
+        }
+        return true;
     }
 
     private void printInputInterface(Ship ship) {
@@ -102,7 +109,6 @@ public class BattleShip {
 
        return field;
     }
-
 
 
 }
