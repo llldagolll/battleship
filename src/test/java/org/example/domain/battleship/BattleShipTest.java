@@ -71,62 +71,62 @@ public class BattleShipTest {
     @Test
     @DisplayName("A~J以内のアルファベットが入力されたとき、trueを返す")
     void GivenUpperAToJ_shouldReturnTrue() throws IOException {
-        String startingPoint = "A10";
-        assertTrue(true, String.valueOf(battleShip.IsInputValueTypeCorrect(startingPoint)));
+        String point = "A10";
+        assertTrue(true, String.valueOf(battleShip.IsInputValueTypeCorrect(point)));
     }
 
     @Test
     @DisplayName("1~10以内の数字が入力されたとき、trueを返す")
     void Given1To10_shouldReturnTrue() throws IOException {
-        String startingPoint = "B10";
-        assertTrue(true, String.valueOf(battleShip.IsInputValueTypeCorrect(startingPoint)));
+        String point = "B10";
+        assertTrue(true, String.valueOf(battleShip.IsInputValueTypeCorrect(point)));
     }
 
     @Test
     @DisplayName("K以降のアルファベットが入力されたとき、IOExceptionを投げる")
     void GivenAfterK_shouldThrowIOException() {
-        String invalidStartingPoint = "K3";
-        assertThrows(IOException.class, () -> battleShip.IsInputValueTypeCorrect(invalidStartingPoint));
+        String invalidPoint = "K3";
+        assertThrows(IOException.class, () -> battleShip.IsInputValueTypeCorrect(invalidPoint));
     }
     @Test
     @DisplayName("小文字のa~j以内のアルファベットが入力されたとき、IOExceptionを投げる")
     void GivenLowerAToJ_shouldThrowIOException() {
-        String invalidStartingPoint = "a3";
-        assertThrows(IOException.class, () -> battleShip.IsInputValueTypeCorrect(invalidStartingPoint));
+        String invalidPoint = "a3";
+        assertThrows(IOException.class, () -> battleShip.IsInputValueTypeCorrect(invalidPoint));
 
     }
     @Test
     @DisplayName("0が入力されたとき、IOExceptionを投げる")
     void Given0_shouldThrowIOException() {
-        String invalidStartingPoint = "D0";
-        assertThrows(IOException.class, () -> battleShip.IsInputValueTypeCorrect(invalidStartingPoint));
+        String invalidPoint = "D0";
+        assertThrows(IOException.class, () -> battleShip.IsInputValueTypeCorrect(invalidPoint));
     }
 
     @Test
     @DisplayName("11以降が入力されたとき、IOExceptionを投げる")
     void GivenAfter11_shouldThrowIOException() {
-        String invalidStartingPoint = "D11";
-        assertThrows(IOException.class, () -> battleShip.IsInputValueTypeCorrect(invalidStartingPoint));
+        String invalidPoint = "D11";
+        assertThrows(IOException.class, () -> battleShip.IsInputValueTypeCorrect(invalidPoint));
     }
 
     @Test
     @DisplayName("座標が2つ渡さたとき、trueを返す")
     void Given2Coordinates_shouldReturnTrue() throws IOException {
-        String validInput = "A10 B9";
-        assertTrue(true, String.valueOf(battleShip.isCoordinatesTwo(validInput)));
+        String twoCoordinates = "A10 B9";
+        assertTrue(true, String.valueOf(battleShip.isCoordinatesTwo(twoCoordinates)));
     }
     @Test
     @DisplayName("座標が1つしか渡されなかったとき、IOExceptionを投げる")
     void GivenOnly1Coordinate_shouldThrowIOException(){
-        String invalidInput = "A10";
-        assertThrows(IOException.class, () -> battleShip.isCoordinatesTwo(invalidInput));
+        String oneCoordinate = "A10";
+        assertThrows(IOException.class, () -> battleShip.isCoordinatesTwo(oneCoordinate));
     }
 
     @Test
     @DisplayName("座標が3つ以上渡されたとき、IOExceptionを投げる")
     void GivenOnly3Coordinate_shouldThrowIOException(){
-        String invalidInput = "A10 B4 C5";
-        assertThrows(IOException.class, () -> battleShip.isCoordinatesTwo(invalidInput));
+        String threeCoordinate = "A10 B4 C5";
+        assertThrows(IOException.class, () -> battleShip.isCoordinatesTwo(threeCoordinate));
     }
 
     @Test

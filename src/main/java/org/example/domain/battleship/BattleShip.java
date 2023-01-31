@@ -28,8 +28,8 @@ public class BattleShip {
         for (Ship s :
                 ship) {
             showField();
-            String input = inputFromUser(scanner, s);
-//            setShip(input);
+            String coordinates = inputCoordinatesFromUser(scanner, s);
+//            setShip(coordinates);
         }
     }
 
@@ -64,13 +64,13 @@ public class BattleShip {
         System.out.println();
     }
 
-    String inputFromUser(Scanner scanner, Ship ship) {
+    String inputCoordinatesFromUser(Scanner scanner, Ship ship) {
         printInputInterface(ship);
-        String input = scanner.nextLine();
-        System.out.println(input); //debug用
+        String coordinates = scanner.nextLine();
+        System.out.println(coordinates); //debug用
         System.out.println();
 
-        return input;
+        return coordinates;
     }
 
     boolean IsInputValueTypeCorrect(String point) throws IOException {
