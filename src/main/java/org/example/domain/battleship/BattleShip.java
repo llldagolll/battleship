@@ -1,15 +1,12 @@
 package org.example.domain.battleship;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-@NoArgsConstructor
 @Data
 public class BattleShip {
 
@@ -21,27 +18,40 @@ public class BattleShip {
 
     int[] columnOfNum = new int[]{1, 2, 3, 4, 5, 6, 7 ,8, 9, 10};
 
+    public BattleShip() {
+        generateField();
+    }
 
-    public void play() {
+    public void run() throws InvalidInputFormatException {
+
         Ship[] ship = Ship.values();
-        Scanner scanner = new Scanner(System.in);
-
         for (Ship s :
                 ship) {
-            showField();
-            String coordinates = input(scanner, s);
-//            setShip(coordinates);
+            play(s);
         }
     }
 
-//    private void setShip(String input) {
-//
-//    }
+    void play(Ship ship) throws InvalidInputFormatException {
+        Scanner scanner = new Scanner(System.in);
 
+        try {
+            showField();
+            String c = input(scanner, ship);
+            var coordinates = extractCoordinates(c);
+
+
+
+            setShip(ship ,coordinates);
+
+        } catch (InvalidInputFormatException | PlacedShipTooCloseToAnotherShipException | WrongLengthException e) {
+            System.out.printf("%s\n", e.getMessage());
+            System.out.println();
+            play(ship);
+        }
+    }
 
 
     void showField() {
-        generateField();
         int row = getRow();
         int column = getColumn();
         for (int i = 0; i < row; i++) {
@@ -68,43 +78,77 @@ public class BattleShip {
     String input(Scanner scanner, Ship ship) {
         printInputInterface(ship);
         String coordinates = scanner.nextLine();
-        System.out.println(coordinates); //debug用
         System.out.println();
 
         return coordinates;
     }
 
-    boolean isCoordinateFormatCorrect(String point) throws IOException {
+    boolean isCoordinateFormatCorrect(String point) throws InvalidInputFormatException {
         String regex = "[A-J]([1-9]|10)";
         Pattern p1 = Pattern.compile(regex); // 正規表現パターンの読み込み
         Matcher m1 = p1.matcher(point); // パターンと検査対象文字列の照合
         boolean result = m1.matches(); // 照合結果をtrueかfalseで取得
         if (!m1.matches()) {
-            throw new IOException("不適切なフォーマットです");
+            throw new InvalidInputFormatException();
         }
         return result;
     }
 
 
-    public void placeO(String inputCoordinateFromUser) throws IOException {
-        var coordinates = extractCoordinates(inputCoordinateFromUser);
+    public void setShip(Ship ship, Map<String, Map<String, Integer>> coordinates) throws InvalidInputFormatException, PlacedShipTooCloseToAnotherShipException, WrongLengthException {
         int startRow = coordinates.get("start").get("row");
         int startColumn = coordinates.get("start").get("column");
         int endRow = coordinates.get("end").get("row");
         int endColumn = coordinates.get("end").get("column");
 
-        field[startRow][startColumn] = 'O';
+
+        //船を横に置く場合
+        if(startRow == endRow) {
+            if (ship.getSize() != (endColumn-startColumn+1)) {
+                throw  new WrongLengthException(ship.getName());
+            }
+
+            for (int i = 0; i < (endColumn - startColumn + 1); i++) {
+                if (field[startRow][startColumn+i] == 'O') {
+                    throw new PlacedShipTooCloseToAnotherShipException();
+                }
+            }
+
+            for (int i = 0; i < (endColumn - startColumn + 1); i++) {
+                field[startRow][startColumn+i] = 'O';
+            }
+            return;
+        }
+
+        //船を縦に置く場合
+        if (ship.getSize() != (endRow - startRow + 1)) {
+            throw  new WrongLengthException(ship.getName());
+        }
+
+
+
+        for (int i = 0; i < (endRow - startRow + 1); i++) {
+            if (field[startRow+i][startColumn] == 'O') {
+                throw new PlacedShipTooCloseToAnotherShipException();
+            }
+        }
+
+        for (int i = 0; i < (endRow - startRow + 1); i++) {
+            field[startRow+i][startColumn] = 'O';
+        }
     }
 
-    public void setShip(String inputCoordinateFromUser) {
 
-    }
 
-     Map<String, Map<String, Integer>> extractCoordinates(String inputCoordinatesFromUser) throws IOException {
+
+
+     Map<String, Map<String, Integer>> extractCoordinates(String inputCoordinatesFromUser) throws InvalidInputFormatException {
 
         String[] c = split(inputCoordinatesFromUser);
 
-        int startRow = rowOfAlphabets.indexOf(c[0].charAt(0)); //[[startRow, startColumn], [endRow, endColumn]]
+        int startRow = rowOfAlphabets.indexOf(c[0].charAt(0));
+        int endRow = rowOfAlphabets.indexOf(c[1].charAt(0));
+
         int startColumn;
 
         if (c[0].length() == 2) {
@@ -113,7 +157,6 @@ public class BattleShip {
             startColumn = Integer.parseInt(c[0].substring(1, 3)) - 1;
         }
 
-        int endRow = rowOfAlphabets.indexOf(c[1].charAt(0));
         int endColumn;
 
         if (c[1].length() == 2) {
@@ -121,6 +164,17 @@ public class BattleShip {
         } else {
             endColumn = Integer.parseInt(c[0].substring(1, 3)) - 1;
         }
+
+
+         //船を斜めに置いたらエラーを投げる
+         if (startRow != endRow && startColumn != endColumn) {
+             throw new InvalidInputFormatException();
+         }
+
+         //船がボードからはみ出たらエラーを投げる
+         if (endRow > 10 || endColumn > 10) {
+             throw new InvalidInputFormatException();
+         }
 
 
         Map<String, Map<String, Integer>> coordinates = new HashMap<>();
@@ -158,17 +212,18 @@ public class BattleShip {
     }
 
 
-    public String[] split(String inputCoordinatesFromUser) throws IOException {
+    public String[] split(String inputCoordinatesFromUser) throws InvalidInputFormatException {
         String[] coordinates;
         coordinates = inputCoordinatesFromUser.split(" ");
+
         if (coordinates.length != 2){
-            throw new IOException();
+            throw new InvalidInputFormatException();
         }
 
         for (String c :
                 coordinates) {
             if(!isCoordinateFormatCorrect(c)){
-                throw new IOException();
+                throw new InvalidInputFormatException();
             }
         }
 

@@ -2,13 +2,11 @@ package org.example.domain.battleship;
 
 
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,11 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class BattleShipTest {
-    BattleShip battleShip = new BattleShip();
 
     @Test
     @DisplayName("二次元配列10 * 10が同じか")
     void A10_10_TwoDimensionalArray() {
+
+        BattleShip battleShip = new BattleShip();
+
         char[][] field = new char[10][10];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -35,105 +35,96 @@ public class BattleShipTest {
     @Test
     @DisplayName("大文字アルファベット A => Jの文字型の配列を作成")
     void IsAlphabetAWithJOfArray() {
+        BattleShip battleShip = new BattleShip();
         String rowOfAlphabets = "ABCDEFGHIJ";
         assertEquals(rowOfAlphabets, battleShip.getRowOfAlphabets());
     }
     @Test
     @DisplayName("1 => 10の文字型の配列を作成")
     void IsNumber1With10OfArray() {
+        BattleShip battleShip = new BattleShip();
         int[] columnOfNum = new int[]{1, 2, 3, 4, 5, 6, 7 ,8, 9, 10};
         assertArrayEquals(columnOfNum, battleShip.getColumnOfNum());
     }
 
 
 
-    private final StandardInputStream in = new StandardInputStream();
-    private final StandardOutputStream out = new StandardOutputStream();
 
-    @BeforeEach
-    public void before() {
-        System.setIn(in);
-        System.setOut(out);
-    }
-
-    @AfterEach
-    public void after() {
-        System.setIn(null);
-        System.setOut(null);
-    }
-
-    @Test
-    @DisplayName("標準入力と標準出力の結果が一致しているか")
-    public void IsStdinAndStandardOutputResultMatched() {
-        in.inputln("fuga");
-        System.out.println("fuga");
-        assertEquals("fuga", out.readLine());
-    }
 
     @Test
     @DisplayName("A~J以内のアルファベットが入力されたとき、trueを返す")
-    void GivenUpperAToJ_shouldReturnTrue() throws IOException {
+    void givenUpperAToJ_shouldReturnTrue() throws InvalidInputFormatException {
+        BattleShip battleShip = new BattleShip();
         String point = "A10";
         assertTrue(true, String.valueOf(battleShip.isCoordinateFormatCorrect(point)));
     }
 
     @Test
     @DisplayName("1~10以内の数字が入力されたとき、trueを返す")
-    void Given1To10_shouldReturnTrue() throws IOException {
+    void given1To10_shouldReturnTrue() throws InvalidInputFormatException {
+        BattleShip battleShip = new BattleShip();
         String point = "B10";
         assertTrue(true, String.valueOf(battleShip.isCoordinateFormatCorrect(point)));
     }
 
     @Test
-    @DisplayName("K以降のアルファベットが入力されたとき、IOExceptionを投げる")
-    void GivenAfterK_shouldThrowIOException() {
+    @DisplayName("K以降のアルファベットが入力されたとき、InvalidInputFormatExceptionを投げる")
+    void givenAfterK_shouldThrowInvalidInputFormatException() {
+        BattleShip battleShip = new BattleShip();
         String invalidPoint = "K3";
-        assertThrows(IOException.class, () -> battleShip.isCoordinateFormatCorrect(invalidPoint));
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.isCoordinateFormatCorrect(invalidPoint));
     }
     @Test
-    @DisplayName("小文字のa~j以内のアルファベットが入力されたとき、IOExceptionを投げる")
-    void GivenLowerAToJ_shouldThrowIOException() {
+    @DisplayName("小文字のa~j以内のアルファベットが入力されたとき、InvalidInputFormatExceptionを投げる")
+    void givenLowerAToJ_shouldThrowInvalidInputFormatException() {
+        BattleShip battleShip = new BattleShip();
         String invalidPoint = "a3";
-        assertThrows(IOException.class, () -> battleShip.isCoordinateFormatCorrect(invalidPoint));
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.isCoordinateFormatCorrect(invalidPoint));
 
     }
     @Test
-    @DisplayName("0が入力されたとき、IOExceptionを投げる")
-    void Given0_shouldThrowIOException() {
+    @DisplayName("0が入力されたとき、InvalidInputFormatExceptionを投げる")
+    void given0_shouldThrowInvalidInputFormatException() {
+        BattleShip battleShip = new BattleShip();
         String invalidPoint = "D0";
-        assertThrows(IOException.class, () -> battleShip.isCoordinateFormatCorrect(invalidPoint));
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.isCoordinateFormatCorrect(invalidPoint));
     }
 
     @Test
-    @DisplayName("11以降が入力されたとき、IOExceptionを投げる")
-    void GivenAfter11_shouldThrowIOException() {
+    @DisplayName("11以降が入力されたとき、InvalidInputFormatExceptionを投げる")
+    void givenAfter11_shouldThrowInvalidInputFormatException() {
+        BattleShip battleShip = new BattleShip();
         String invalidPoint = "D11";
-        assertThrows(IOException.class, () -> battleShip.isCoordinateFormatCorrect(invalidPoint));
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.isCoordinateFormatCorrect(invalidPoint));
     }
 
     @Test
     @DisplayName("座標が2つ渡さたとき、trueを返す")
-    void Given2Coordinates_shouldReturnTrue() throws IOException {
+    void given2Coordinates_shouldReturnTrue() throws InvalidInputFormatException {
+        BattleShip battleShip = new BattleShip();
         String twoCoordinates = "A10 B9";
-        assertTrue(true, String.valueOf(battleShip.split(twoCoordinates)));
+        assertTrue(true, Arrays.toString(battleShip.split(twoCoordinates)));
     }
     @Test
-    @DisplayName("座標が1つしか渡されなかったとき、IOExceptionを投げる")
-    void GivenOnly1Coordinate_shouldThrowIOException(){
+    @DisplayName("座標が1つしか渡されなかったとき、InvalidInputFormatExceptionを投げる")
+    void givenOnly1Coordinate_shouldThrowInvalidInputFormatException(){
+        BattleShip battleShip = new BattleShip();
         String oneCoordinate = "A10";
-        assertThrows(IOException.class, () -> battleShip.split(oneCoordinate));
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.split(oneCoordinate));
     }
 
     @Test
-    @DisplayName("座標が3つ以上渡されたとき、IOExceptionを投げる")
-    void GivenOnly3Coordinate_shouldThrowIOException(){
+    @DisplayName("座標が3つ以上渡されたとき、InvalidInputFormatExceptionを投げる")
+    void givenOnly3Coordinate_shouldThrowInvalidInputFormatException(){
+        BattleShip battleShip = new BattleShip();
         String threeCoordinate = "A10 B4 C5";
-        assertThrows(IOException.class, () -> battleShip.split(threeCoordinate));
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.split(threeCoordinate));
     }
 
     @Test
     @DisplayName("座標は正しく取れているか？")
-    void GivenA1_shouldBe00() throws IOException {
+    void givenA1_shouldBe00() throws InvalidInputFormatException {
+        BattleShip battleShip = new BattleShip();
         Map<String, Map<String, Integer>> expected = new HashMap<>();
 
         expected.put("start", new HashMap<>());
@@ -153,38 +144,128 @@ public class BattleShipTest {
     }
 
     @Test
-    @DisplayName("座標A1をOに置き換える")
-    void GivenA1_shouldBeO() throws IOException {
+    @DisplayName("船を横に置いた場合(座標A1からA5をOに置き換える)")
+    void givenA1ToA5_shouldBeO() throws InvalidInputFormatException, PlacedShipTooCloseToAnotherShipException, WrongLengthException {
+        BattleShip battleShip = new BattleShip();
         char[][] field = new char[10][10];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 field[i][j] = '~';
             }
         }
+
+        field[0][0] = 'O';
         field[0][1] = 'O';
-        battleShip.generateField();
-        battleShip.placeO("A1");
+        field[0][2] = 'O';
+        field[0][3] = 'O';
+        field[0][4] = 'O';
+        var coordinates = extractCoordinates("A1 A5");
+        battleShip.setShip(Ship.AIRCRAFT_CARRIER ,coordinates);
         assertArrayEquals(field, battleShip.getField());
+    }
+
+    @Test
+    @DisplayName("船を縦に置いた場合(座標B1からF1をOに置き換える)")
+    void givenA1ToE1_shouldBeO() throws InvalidInputFormatException, PlacedShipTooCloseToAnotherShipException, WrongLengthException {
+        BattleShip battleShip = new BattleShip();
+        char[][] field = new char[10][10];
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                field[i][j] = '~';
+            }
+        }
+
+        field[1][0] = 'O';
+        field[2][0] = 'O';
+        field[3][0] = 'O';
+        field[4][0] = 'O';
+        field[5][0] = 'O';
+
+        Map<String, Map<String, Integer>> coordinates = extractCoordinates("B1 F1");
+
+        battleShip.setShip(Ship.AIRCRAFT_CARRIER, coordinates);
+        assertArrayEquals(field, battleShip.getField());
+    }
+
+    @Test
+    @DisplayName("船を斜めに置いたらInvalidInputFormatExceptionを投げる")
+    void whenPutShipOnCross_ThrowInvalidInputFormatException()  {
+        BattleShip battleShip = new BattleShip();
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.extractCoordinates("A1 B5"));
+    }
+
+    @Test
+    @DisplayName("船がフィールドからはみ出たらInvalidInputFormatExceptionを投げる")
+    void whenShipFieldWithOut_ThrowInvalidInputFormatException() {
+        BattleShip battleShip = new BattleShip();
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.extractCoordinates("A7 A11"));
+    }
+
+    @Test
+    @DisplayName("船のサイズと入力された座標のサイズが違うときWrongLengthExceptionを投げる、船のサイズより小さかった場合")
+    void whenShipSizeAndInputCoordinateSizeDifferentSmaller_ThrowInvalidInputFormatException() {
+        BattleShip battleShip = new BattleShip();
+        var coordinates = extractCoordinates("A1 A3");
+        assertThrows(WrongLengthException.class, () -> battleShip.setShip(Ship.AIRCRAFT_CARRIER, coordinates));
     }
 
 
     @Test
-    @DisplayName("座標A1からA5をOに置き換える")
-    void GivenA1ToA5_shouldBeO() throws IOException {
-        char[][] field = new char[10][10];
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                field[i][j] = '~';
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            field[0][i] = 'O';
-        }
-
-        battleShip.generateField();
-        battleShip.setShip("A1 A5");
-
-        assertArrayEquals(field, battleShip.getField());
-
+    @DisplayName("船のサイズと入力された座標のサイズが違うときWrongLengthExceptionを投げる、船のサイズよりも大きかった場合")
+    void whenShipSizeAndInputCoordinateSizeDifferentBigger_ThrowInvalidInputFormatException()  {
+        BattleShip battleShip = new BattleShip();
+        var coordinates = extractCoordinates("A1 A6");
+        assertThrows(WrongLengthException.class, () -> battleShip.setShip(Ship.AIRCRAFT_CARRIER, coordinates));
     }
+
+    @Test
+    @DisplayName("すでに船が配置されているところに配置しようとしたとき、PlacedShipTooCloseToAnotherShipExceptionを投げる")
+    void whenAlreadyShipPlaced_shouldThrowInvalidInputFormatException() throws PlacedShipTooCloseToAnotherShipException, InvalidInputFormatException, WrongLengthException {
+        BattleShip battleShip = new BattleShip();
+        var coordinates = extractCoordinates("A1 A5");
+        battleShip.setShip(Ship.AIRCRAFT_CARRIER, coordinates);
+        assertThrows(PlacedShipTooCloseToAnotherShipException.class, () -> battleShip.setShip(Ship.AIRCRAFT_CARRIER ,coordinates));
+    }
+
+
+
+     Map<String, Map<String, Integer>> extractCoordinates(String inputCoordinatesFromUser) {
+        BattleShip battleShip = new BattleShip();
+
+        String[] c = inputCoordinatesFromUser.split(" ");
+
+        int startRow = battleShip.rowOfAlphabets.indexOf(c[0].charAt(0));
+        int startColumn;
+
+        if (c[0].length() == 2) {
+            startColumn = Integer.parseInt(c[0].substring(1,2)) -1;
+        } else{
+            startColumn = Integer.parseInt(c[0].substring(1, 3)) - 1;
+        }
+
+        int endRow = battleShip.rowOfAlphabets.indexOf(c[1].charAt(0));
+        int endColumn;
+
+        if (c[1].length() == 2) {
+            endColumn = Integer.parseInt(c[1].substring(1,2)) -1;
+        } else {
+            endColumn = Integer.parseInt(c[0].substring(1, 3)) - 1;
+        }
+
+
+        Map<String, Map<String, Integer>> coordinates = new HashMap<>();
+        coordinates.put("start", new HashMap<>());
+        coordinates.put("end", new HashMap<>());
+
+        coordinates.get("start").put("row", startRow);
+        coordinates.get("start").put("column", startColumn);
+        coordinates.get("end").put("row", endRow);
+        coordinates.get("end").put("column", endColumn);
+
+
+        return coordinates;
+    }
+
+
+
 }
