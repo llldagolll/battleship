@@ -128,7 +128,7 @@ public class BattleShipTest {
         expected.get("end").put("row", 0);
         expected.get("end").put("column", 4);
 
-        Map<String, Map<String, Integer>> actual = battleShip.extractCoordinates("A1 A5");
+        Map<String, Map<String, Integer>> actual = battleShip.extractValidCoordinates("A1 A5");
 
         assertEquals(expected.get("start").get("row"), actual.get("start").get("row"));
         assertEquals(expected.get("start").get("column"), actual.get("start").get("column"));
@@ -181,13 +181,13 @@ public class BattleShipTest {
     @Test
     @DisplayName("船を斜めに置いたらInvalidInputFormatExceptionを投げる")
     void whenPutShipOnCross_ThrowInvalidInputFormatException()  {
-        assertThrows(InvalidInputFormatException.class, () -> battleShip.extractCoordinates("A1 B5"));
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.extractValidCoordinates("A1 B5"));
     }
 
     @Test
     @DisplayName("船がフィールドからはみ出たらInvalidInputFormatExceptionを投げる")
     void whenShipFieldWithOut_ThrowInvalidInputFormatException() {
-        assertThrows(InvalidInputFormatException.class, () -> battleShip.extractCoordinates("A7 A11"));
+        assertThrows(InvalidInputFormatException.class, () -> battleShip.extractValidCoordinates("A7 A11"));
     }
 
     @Test

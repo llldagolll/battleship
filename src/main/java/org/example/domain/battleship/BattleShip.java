@@ -37,7 +37,7 @@ public class BattleShip {
         try {
             showField();
             String c = input(scanner, ship);
-            var coordinates = extractCoordinates(c);
+            var coordinates = extractValidCoordinates(c);
 
 
 
@@ -142,7 +142,7 @@ public class BattleShip {
 
 
 
-     Map<String, Map<String, Integer>> extractCoordinates(String inputCoordinatesFromUser) throws InvalidInputFormatException {
+     Map<String, Map<String, Integer>> extractValidCoordinates(String inputCoordinatesFromUser) throws InvalidInputFormatException {
 
         String[] c = split(inputCoordinatesFromUser);
 
